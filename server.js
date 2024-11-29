@@ -1,43 +1,26 @@
 const express = require('express');
 const axios = require('axios');
-const cors = require('cors');
 const cheerio = require('cheerio');
+const cors = require('cors');
+
 const app = express();
-
 app.use(cors());
-
 
 app.get('/fetch-bbc', async (req, res) => {
     try {
-        // Fetch the HTML content from the BBC website
-        const response = await axios.get('https://bbc.com');
-
-        // Load the HTML into Cheerio
-        const $ = cheerio.load(response.data);
-
-        // Initialize an array to hold the article data
-        const articles = [];
-
-        // Loop through each article (adjust selector if necessary)
-        $('a').each((index, element) => {
-            const title = $(element).text().trim();
-            const description = $(element).attr('href'); // If description is in the link
-            // Check if we got a valid title and description
-            if (title && description) {
-                articles.push({ title, description });
-            }
-        });
-
-        // Send the articles back in the response
+        const { data } = await axios.get('https://bbc.com');
+        const $ = cheerio.load(data);
+        const articles = $('a')
+            .map((_, el) => {
+                const title = $(el).text().trim();
+                const description = $(el).attr('href');
+                return title && description ? { title, description } : null;
+            })
+            .get();
         res.json(articles);
-    } catch (err) {
+    } catch {
         res.status(500).send('Error fetching or parsing BBC data');
     }
 });
 
-// Start the server
-const PORT = 3000;
-app.listen(PORT, () => {
-    console.log(`Proxy running on port ${PORT}`);
-    console.log(`Access it at: http://localhost:${PORT}`);
-});
+app.listen(3000, () => console.log('Proxy running on http://localhost:3000'));
