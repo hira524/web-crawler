@@ -1,0 +1,43 @@
+<div class="container">
+  <h1>BBC Articles</h1>
+
+  <!-- Show error message if there's an issue -->
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <!-- Show loading message while fetching articles -->
+  <div *ngIf="!error && articles.length === 0" class="loading">Loading articles...</div>
+
+  <!-- View toggle buttons -->
+  <div *ngIf="!error && articles.length > 0" class="view-buttons">
+    <button (click)="changeView('title')">Title View</button>
+    <button (click)="changeView('description')">Description View</button>
+    <button (click)="changeView('all')">All View</button>
+  </div>
+
+  <!-- Display filtered articles based on view mode -->
+  <div *ngIf="!error && filteredArticles.length > 0">
+    <ul>
+      <li *ngFor="let article of filteredArticles">
+        <!-- Title view -->
+        <p *ngIf="viewMode === 'title'">{{ article.title }}</p>
+
+        <!-- Description view -->
+        <p *ngIf="viewMode === 'description'">
+          <a [href]="article.description" target="_blank">{{ article.description }}</a>
+        </p>
+
+        <!-- All view -->
+        <p *ngIf="viewMode === 'all'">
+          <strong>Title:</strong> {{ article.title }}<br>
+          <strong>Description:</strong>
+          <a [href]="article.description" target="_blank">{{ article.description }}</a>
+        </p>
+      </li>
+    </ul>
+  </div>
+  
+  <!-- Show no articles message if no data is available -->
+  <div *ngIf="!error && filteredArticles.length === 0" class="no-articles">
+    No articles found for this view.
+  </div>
+</div>
