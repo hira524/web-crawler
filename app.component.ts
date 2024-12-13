@@ -15,18 +15,17 @@ interface Article {
   imports: [NgIf, NgForOf],
 })
 export class AppComponent implements OnInit {
-  articles: Article[] = []; // All articles fetched from the server
-  filteredArticles: Article[] = []; // Articles to display based on view mode
-  error: string | null = null; // To store error messages
-  viewMode: 'title' | 'description' | 'all' = 'title'; // Current display mode
+  articles: Article[] = [];
+  filteredArticles: Article[] = [];
+  error: string | null = null;
+  viewMode: 'title' | 'description' | 'all' = 'title';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {} // This is used in loadArticles()
 
   ngOnInit(): void {
     this.loadArticles();
   }
 
-  // Method to load articles
   loadArticles(): void {
     this.http.get<Article[]>('http://localhost:3000/fetch-bbc').subscribe({
       next: (data: Article[]) => {
@@ -36,8 +35,8 @@ export class AppComponent implements OnInit {
       },
       error: (err: unknown) => {
         if (err instanceof HttpErrorResponse) {
-          console.error('Error status:', err.status); // Log the HTTP status code
-          console.error('Error message:', err.message); // Log the error message
+          console.error('Error status:', err.status);
+          console.error('Error message:', err.message);
           this.error = 'Failed to load articles. Please try again later.';
         } else {
           console.error('An unknown error occurred:', err);
@@ -47,11 +46,9 @@ export class AppComponent implements OnInit {
     });
   }
 
-  // Change the view mode
   changeView(mode: 'title' | 'description' | 'all'): void {
     this.viewMode = mode;
 
-    // Filter articles based on view mode
     if (mode === 'title') {
       this.filteredArticles = this.articles.map((article) => ({
         title: article.title,
