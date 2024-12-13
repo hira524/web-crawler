@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
   error: string | null = null;
   viewMode: 'title' | 'description' | 'all' = 'title';
 
-  constructor(private http: HttpClient) {} // This is used in loadArticles()
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
     this.loadArticles();
@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
         this.error = null;
       },
       error: (err: unknown) => {
-        if (err instanceof HttpErrorResponse) {
+        if (this.isHttpErrorResponse(err)) {
           console.error('Error status:', err.status);
           console.error('Error message:', err.message);
           this.error = 'Failed to load articles. Please try again later.';
@@ -44,6 +44,11 @@ export class AppComponent implements OnInit {
         }
       },
     });
+  }
+
+  // Helper function to check if the error is an instance of HttpErrorResponse
+  private isHttpErrorResponse(err: unknown): err is HttpErrorResponse {
+    return err instanceof HttpErrorResponse;
   }
 
   changeView(mode: 'title' | 'description' | 'all'): void {
