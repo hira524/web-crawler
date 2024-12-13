@@ -34,10 +34,15 @@ export class AppComponent implements OnInit {
         this.filteredArticles = data;
         this.error = null;
       },
-      error: (err: HttpErrorResponse) => {
-        console.error('Error status:', err.status); // Log the HTTP status code
-        console.error('Error message:', err.message); // Log the error message
-        this.error = 'Failed to load articles. Please try again later.';
+      error: (err: unknown) => {
+        if (err instanceof HttpErrorResponse) {
+          console.error('Error status:', err.status); // Log the HTTP status code
+          console.error('Error message:', err.message); // Log the error message
+          this.error = 'Failed to load articles. Please try again later.';
+        } else {
+          console.error('An unknown error occurred:', err);
+          this.error = 'An unexpected error occurred. Please try again later.';
+        }
       }
     });
   }
