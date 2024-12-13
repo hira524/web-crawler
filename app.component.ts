@@ -20,9 +20,7 @@ export class AppComponent implements OnInit {
   error: string | null = null; // To store error messages
   viewMode: 'title' | 'description' | 'all' = 'title'; // Current display mode
 
-  constructor(private http: HttpClient) {
-    // HttpClient is used in loadArticles method
-  }
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
     this.loadArticles();
