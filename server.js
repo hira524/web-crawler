@@ -1,3 +1,5 @@
+
+// eslint-disable-next-line global-require
 const express = require('express'); // Web framework for building the server
 const axios = require('axios'); // Library for making HTTP requests
 const cheerio = require('cheerio'); // Library for parsing and extracting data from HTML
