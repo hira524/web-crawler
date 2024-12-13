@@ -20,7 +20,9 @@ export class AppComponent implements OnInit {
   error: string | null = null; // To store error messages
   viewMode: 'title' | 'description' | 'all' = 'title'; // Current display mode
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    // HttpClient is used in loadArticles method
+  }
 
   ngOnInit(): void {
     this.loadArticles();
@@ -28,26 +30,23 @@ export class AppComponent implements OnInit {
 
   // Method to load articles
   loadArticles(): void {
-    this.http
-      .get<Article[]>('http://localhost:3000/fetch-bbc')
-      .subscribe({
-        next: (data: Article[]) => {
-          // Ensure data is treated as an array of Article objects
-          this.articles = data;
-          this.filteredArticles = data;
-          this.error = null;
-        },
-        error: (err: unknown) => {
-          if (err instanceof HttpErrorResponse) {
-            console.error('Error status:', err.status); // Log the HTTP status code
-            console.error('Error message:', err.message); // Log the error message
-            this.error = 'Failed to load articles. Please try again later.';
-          } else {
-            console.error('An unknown error occurred:', err);
-            this.error = 'An unexpected error occurred. Please try again later.';
-          }
-        },
-      });
+    this.http.get<Article[]>('http://localhost:3000/fetch-bbc').subscribe({
+      next: (data: Article[]) => {
+        this.articles = data;
+        this.filteredArticles = data;
+        this.error = null;
+      },
+      error: (err: unknown) => {
+        if (err instanceof HttpErrorResponse) {
+          console.error('Error status:', err.status); // Log the HTTP status code
+          console.error('Error message:', err.message); // Log the error message
+          this.error = 'Failed to load articles. Please try again later.';
+        } else {
+          console.error('An unknown error occurred:', err);
+          this.error = 'An unexpected error occurred. Please try again later.';
+        }
+      },
+    });
   }
 
   // Change the view mode
