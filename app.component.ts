@@ -12,7 +12,7 @@ interface Article {
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  imports: [NgIf, NgForOf]
+  imports: [NgIf, NgForOf],
 })
 export class AppComponent implements OnInit {
   articles: Article[] = []; // All articles fetched from the server
@@ -45,7 +45,7 @@ export class AppComponent implements OnInit {
           console.error('An unknown error occurred:', err);
           this.error = 'An unexpected error occurred. Please try again later.';
         }
-      }
+      },
     });
   }
 
@@ -55,14 +55,14 @@ export class AppComponent implements OnInit {
 
     // Filter articles based on view mode
     if (mode === 'title') {
-      this.filteredArticles = this.articles.map(article => ({
+      this.filteredArticles = this.articles.map((article) => ({
         title: article.title,
-        description: ''
+        description: '',
       }));
     } else if (mode === 'description') {
-      this.filteredArticles = this.articles.map(article => ({
+      this.filteredArticles = this.articles.map((article) => ({
         title: '',
-        description: article.description
+        description: article.description,
       }));
     } else {
       this.filteredArticles = [...this.articles];
